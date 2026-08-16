@@ -22,11 +22,18 @@
 - Decision: Keep all feature docs under `specs/` (not `.specs/`)
 - Rationale: User asked to consolidate everything in the same `specs` folder
 
+### AD-005: In-memory stores + shared Seed + wire RebateService
+- Date: 2026-08-16
+- Decision: Use plain in-memory collections (not EF InMemory); seed under `Smartwyre.DeveloperTest/Data/Seed/`; not-found returns null; `StoreCalculationResult` void append; include RebateService ctor injection and null guards in the same feature so tests go green
+- Rationale: Discuss with user (Runner+Tests share seed via main lib, not Tests; yes to wiring service; seed beside Data)
+
 ## Handoff
 
 - Specs root: `specs/`
 - Features (order):
   - `specs/01-test-data-builders/` — complete
-  - `specs/02-rebate-calculate-tests/` — tests authored; production unchanged; build red until seams
+  - `specs/02-rebate-calculate-tests/` — complete (tests green via 03)
+  - `specs/03-in-memory-datastores/` — Execute complete
+- Evidence: `dotnet test` 16/16 passed; Runner `rebate-fixed-rate` + `product-fixed-rate` + `2` → `Success: True`
 - Branch: `feature/refactor`
-- Next: implement injectable stores / `RebateService` wiring so `RebateServiceTests` compile and pass
+- Next: optional SOLID incentive refactor / commit when asked

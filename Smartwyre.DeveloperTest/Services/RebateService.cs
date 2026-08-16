@@ -5,22 +5,33 @@ namespace Smartwyre.DeveloperTest.Services;
 
 public class RebateService : IRebateService
 {
+    private readonly IRebateDataStore _rebateDataStore;
+    private readonly IProductDataStore _productDataStore;
+
+    public RebateService(IRebateDataStore rebateDataStore, IProductDataStore productDataStore)
+    {
+        _rebateDataStore = rebateDataStore;
+        _productDataStore = productDataStore;
+    }
+
     public CalculateRebateResult Calculate(CalculateRebateRequest request)
     {
-        var rebateDataStore = new RebateDataStore();
-        var productDataStore = new ProductDataStore();
-
-        Rebate rebate = rebateDataStore.GetRebate(request.RebateIdentifier);
-        Product product = productDataStore.GetProduct(request.ProductIdentifier);
+        Rebate rebate = _rebateDataStore.GetRebate(request.RebateIdentifier);
+        Product product = _productDataStore.GetProduct(request.ProductIdentifier);
 
         var result = new CalculateRebateResult();
-
         var rebateAmount = 0m;
+
+        if (rebate == null)
+        {
+            result.Success = false;
+            return result;
+        }
 
         switch (rebate.Incentive)
         {
             case IncentiveType.FixedCashAmount:
-                if (rebate == null)
+                if (product == null)
                 {
                     result.Success = false;
                 }
@@ -40,11 +51,7 @@ public class RebateService : IRebateService
                 break;
 
             case IncentiveType.FixedRateRebate:
-                if (rebate == null)
-                {
-                    result.Success = false;
-                }
-                else if (product == null)
+                if (product == null)
                 {
                     result.Success = false;
                 }
@@ -64,11 +71,7 @@ public class RebateService : IRebateService
                 break;
 
             case IncentiveType.AmountPerUom:
-                if (rebate == null)
-                {
-                    result.Success = false;
-                }
-                else if (product == null)
+                if (product == null)
                 {
                     result.Success = false;
                 }
@@ -90,8 +93,7 @@ public class RebateService : IRebateService
 
         if (result.Success)
         {
-            var storeRebateDataStore = new RebateDataStore();
-            storeRebateDataStore.StoreCalculationResult(rebate, rebateAmount);
+            _rebateDataStore.StoreCalculationResult(rebate, rebateAmount);
         }
 
         return result;
