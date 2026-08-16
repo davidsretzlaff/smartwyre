@@ -32,13 +32,16 @@
 - Decision: `IRebateIncentive.Apply(Product, volume)` → `RebateApplicationResult`; concrete strategies per incentive constructed with rule values; `IRebateIncentiveFactory.Create(Types.Rebate)`; `RebateService` calls Apply via polymorphism (no formula switch)
 - Rationale: User confirmed recommendations (interface name + Apply signature)
 
+### AD-007: Missing unit tests for strategies, factory, and stores
+- Date: 2026-08-16
+- Decision: Add direct unit tests under `Tests/Incentives/` and `Tests/Data/`; DataSeeder smoke; keep S01–S16
+- Rationale: Lower layers lacked isolated coverage
+
 ## Handoff
 
 - Specs root: `specs/`
 - Features (order):
-  - `specs/01-test-data-builders/` — complete
-  - `specs/02-rebate-calculate-tests/` — complete
-  - `specs/03-in-memory-datastores/` — complete
-  - `specs/04-incentive-strategy/` — Execute complete (16/16 tests green)
+  - `specs/01` … `specs/04` — complete
+  - `specs/05-missing-unit-tests/` — Execute complete (`48` tests green)
 - Branch: `feature/refactor`
 - Next: commit when user asks
