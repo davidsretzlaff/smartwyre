@@ -44,3 +44,56 @@ You are free to use any frameworks/NuGet packages that you see fit. You should p
 Feel free to use code comments to describe your changes. You are also welcome to update this readme with any important details for us to consider.
 
 Once you have completed the exercise either ensure your repository is available publicly or contact the hiring manager to set up a private share.
+
+# Solution notes
+
+## Design
+
+`RebateService.Calculate` orchestrates the flow and does not contain per-incentive formulas:
+
+1. Load rebate and product from injected data stores.
+2. Resolve an `IRebateIncentive` strategy via `IRebateIncentiveFactory`.
+3. Call `Apply(product, volume)` (polymorphism).
+4. On success, persist the calculation through `IRebateDataStore`.
+
+Incentive rules live under `Smartwyre.DeveloperTest/Incentives/`:
+
+| Class | Formula (when valid) |
+| --- | --- |
+| `FixedCashAmountRebate` | rebate amount |
+| `FixedRateRebate` | `price × percentage × volume` |
+| `AmountPerUomRebate` | `amount × volume` |
+
+This follows Open/Closed: adding a new incentive type means a new strategy class plus one factory registration, without rewriting Calculate.
+
+Data access uses `IRebateDataStore` / `IProductDataStore` with in-memory implementations. Sample data is shared in `Data/Seed/` for the Runner (and available to tests).
+
+## How to add a new incentive type
+
+1. Add a value to `IncentiveType` / `SupportedIncentiveType` as needed.
+2. Implement `IRebateIncentive` (constructor takes the values the rule needs; `Apply` validates and computes).
+3. Register the type in `RebateIncentiveFactory.Create`.
+4. Seed sample rebate/product data if you want to demo it from the Runner.
+5. Add unit tests for the new scenarios.
+
+## Run tests
+
+```bash
+dotnet test Smartwyre.DeveloperTest.sln
+```
+
+## Run the console app
+
+Interactive prompts:
+
+```bash
+dotnet run --project Smartwyre.DeveloperTest.Runner
+```
+
+Or with arguments (`rebateId` `productId` `volume`):
+
+```bash
+dotnet run --project Smartwyre.DeveloperTest.Runner -- rebate-fixed-rate product-fixed-rate 2
+```
+
+On startup the Runner prints sample rebate and product identifiers from seed data.
