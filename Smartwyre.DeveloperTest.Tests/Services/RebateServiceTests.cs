@@ -105,7 +105,10 @@ public class RebateServiceTests
     public void Calculate_FixedCashAmount_WhenValid_ReturnsSuccessAndStoresAmount()
     {
         var rebate = RebateDataBuilder.ARebate().AsFixedCashAmount(40m).Build();
-        var product = ProductDataBuilder.AProduct().SupportingFixedCashAmount().Build();
+        var product = ProductDataBuilder.AProduct()
+            .SupportingFixedCashAmount()
+            .WithPrice(100m)
+            .Build();
         var request = CalculateRebateRequestDataBuilder.ARebateRequest()
             .ForRebate(rebate)
             .ForProduct(product)
@@ -117,6 +120,12 @@ public class RebateServiceTests
         var result = CreateSut().Calculate(request);
 
         Assert.True(result.Success);
+        Assert.Equal(IncentiveType.FixedCashAmount, result.IncentiveType);
+        Assert.Equal(100m, result.UnitPrice);
+        Assert.Equal(5m, result.Volume);
+        Assert.Equal(500m, result.AmountBeforeDiscount);
+        Assert.Equal(40m, result.RebateAmount);
+        Assert.Equal(460m, result.AmountAfterDiscount);
         _rebateDataStore.Verify(
             store => store.StoreCalculationResult(rebate, 40m),
             Times.Once);
@@ -245,6 +254,12 @@ public class RebateServiceTests
         var result = CreateSut().Calculate(request);
 
         Assert.True(result.Success);
+        Assert.Equal(IncentiveType.FixedRateRebate, result.IncentiveType);
+        Assert.Equal(50m, result.UnitPrice);
+        Assert.Equal(4m, result.Volume);
+        Assert.Equal(200m, result.AmountBeforeDiscount);
+        Assert.Equal(20m, result.RebateAmount);
+        Assert.Equal(180m, result.AmountAfterDiscount);
         _rebateDataStore.Verify(
             store => store.StoreCalculationResult(rebate, 20m),
             Times.Once);
@@ -327,7 +342,10 @@ public class RebateServiceTests
     public void Calculate_AmountPerUom_WhenValid_ReturnsSuccessAndStoresCalculatedAmount()
     {
         var rebate = RebateDataBuilder.ARebate().AsAmountPerUom(3m).Build();
-        var product = ProductDataBuilder.AProduct().SupportingAmountPerUom().Build();
+        var product = ProductDataBuilder.AProduct()
+            .SupportingAmountPerUom()
+            .WithPrice(25m)
+            .Build();
         var request = CalculateRebateRequestDataBuilder.ARebateRequest()
             .ForRebate(rebate)
             .ForProduct(product)
@@ -339,6 +357,12 @@ public class RebateServiceTests
         var result = CreateSut().Calculate(request);
 
         Assert.True(result.Success);
+        Assert.Equal(IncentiveType.AmountPerUom, result.IncentiveType);
+        Assert.Equal(25m, result.UnitPrice);
+        Assert.Equal(5m, result.Volume);
+        Assert.Equal(125m, result.AmountBeforeDiscount);
+        Assert.Equal(15m, result.RebateAmount);
+        Assert.Equal(110m, result.AmountAfterDiscount);
         _rebateDataStore.Verify(
             store => store.StoreCalculationResult(rebate, 15m),
             Times.Once);
