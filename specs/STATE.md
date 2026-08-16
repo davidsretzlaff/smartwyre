@@ -37,11 +37,14 @@
 - Decision: Add direct unit tests under `Tests/Incentives/` and `Tests/Data/`; DataSeeder smoke; keep S01–S16
 - Rationale: Lower layers lacked isolated coverage
 
+### AD-008: Contracts vs Models folder split
+- Date: 2026-08-16
+- Decision: Replace `Types/` with `Contracts/` (request/result) and `Models/` (Rebate/Product/enums); no mappers
+- Rationale: Clearer naming without fake rich domain or slices
+
 ## Handoff
 
 - Specs root: `specs/`
-- Features (order):
-  - `specs/01` … `specs/04` — complete
-  - `specs/05-missing-unit-tests/` — Execute complete (`48` tests green)
+- Features: 01–06 complete (`06-contracts-models` just executed; 48 tests green)
 - Branch: `feature/refactor`
 - Next: commit when user asks

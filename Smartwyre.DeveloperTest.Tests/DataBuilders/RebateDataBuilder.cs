@@ -1,5 +1,6 @@
 using Bogus;
-using Smartwyre.DeveloperTest.Types;
+using Smartwyre.DeveloperTest.Contracts;
+using Smartwyre.DeveloperTest.Models;
 
 namespace Smartwyre.DeveloperTest.Tests.DataBuilders;
 

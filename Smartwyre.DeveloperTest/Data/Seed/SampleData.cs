@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using Smartwyre.DeveloperTest.Types;
+using Smartwyre.DeveloperTest.Contracts;
+using Smartwyre.DeveloperTest.Models;
 
 namespace Smartwyre.DeveloperTest.Data.Seed;
 

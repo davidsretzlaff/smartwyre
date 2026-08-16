@@ -66,6 +66,16 @@ Incentive rules live under `Smartwyre.DeveloperTest/Incentives/`:
 
 This follows Open/Closed: adding a new incentive type means a new strategy class plus one factory registration, without rewriting Calculate.
 
+Folder layout (main library):
+
+| Folder | Role |
+| --- | --- |
+| `Contracts/` | Use-case DTOs (`CalculateRebateRequest` / `Result`) |
+| `Models/` | Data shapes and enums (`Rebate`, `Product`, …) |
+| `Incentives/` | Strategy implementations (domain behavior) |
+| `Data/` | Stores + seed |
+| `Services/` | Orchestration |
+
 Data access uses `IRebateDataStore` / `IProductDataStore` with in-memory implementations. Sample data is shared in `Data/Seed/` for the Runner (and available to tests).
 
 ## How to add a new incentive type

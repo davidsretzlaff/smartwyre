@@ -1,6 +1,7 @@
-﻿using Smartwyre.DeveloperTest.Data;
+using Smartwyre.DeveloperTest.Data;
 using Smartwyre.DeveloperTest.Incentives;
-using Smartwyre.DeveloperTest.Types;
+using Smartwyre.DeveloperTest.Contracts;
+using Smartwyre.DeveloperTest.Models;
 
 namespace Smartwyre.DeveloperTest.Services;
 

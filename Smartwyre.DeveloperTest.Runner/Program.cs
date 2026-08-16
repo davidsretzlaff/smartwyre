@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Smartwyre.DeveloperTest.Data.Seed;
 using Smartwyre.DeveloperTest.Incentives;
 using Smartwyre.DeveloperTest.Services;
-using Smartwyre.DeveloperTest.Types;
+using Smartwyre.DeveloperTest.Contracts;
+using Smartwyre.DeveloperTest.Models;
 
 namespace Smartwyre.DeveloperTest.Runner;
 

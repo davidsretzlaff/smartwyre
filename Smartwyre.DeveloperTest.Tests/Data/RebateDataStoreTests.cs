@@ -1,6 +1,7 @@
 using Smartwyre.DeveloperTest.Data;
 using Smartwyre.DeveloperTest.Tests.DataBuilders;
-using Smartwyre.DeveloperTest.Types;
+using Smartwyre.DeveloperTest.Contracts;
+using Smartwyre.DeveloperTest.Models;
 using Xunit;
 
 namespace Smartwyre.DeveloperTest.Tests.Data;
