@@ -27,13 +27,18 @@
 - Decision: Use plain in-memory collections (not EF InMemory); seed under `Smartwyre.DeveloperTest/Data/Seed/`; not-found returns null; `StoreCalculationResult` void append; include RebateService ctor injection and null guards in the same feature so tests go green
 - Rationale: Discuss with user (Runner+Tests share seed via main lib, not Tests; yes to wiring service; seed beside Data)
 
+### AD-006: Incentive Strategy (OCP)
+- Date: 2026-08-16
+- Decision: `IRebateIncentive.Apply(Product, volume)` → `RebateApplicationResult`; concrete strategies per incentive constructed with rule values; `IRebateIncentiveFactory.Create(Types.Rebate)`; `RebateService` calls Apply via polymorphism (no formula switch)
+- Rationale: User confirmed recommendations (interface name + Apply signature)
+
 ## Handoff
 
 - Specs root: `specs/`
 - Features (order):
   - `specs/01-test-data-builders/` — complete
-  - `specs/02-rebate-calculate-tests/` — complete (tests green via 03)
-  - `specs/03-in-memory-datastores/` — Execute complete
-- Evidence: `dotnet test` 16/16 passed; Runner `rebate-fixed-rate` + `product-fixed-rate` + `2` → `Success: True`
+  - `specs/02-rebate-calculate-tests/` — complete
+  - `specs/03-in-memory-datastores/` — complete
+  - `specs/04-incentive-strategy/` — Execute complete (16/16 tests green)
 - Branch: `feature/refactor`
-- Next: optional SOLID incentive refactor / commit when asked
+- Next: commit when user asks

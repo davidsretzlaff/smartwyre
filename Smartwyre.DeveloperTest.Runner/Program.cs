@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Smartwyre.DeveloperTest.Data.Seed;
+using Smartwyre.DeveloperTest.Incentives;
 using Smartwyre.DeveloperTest.Services;
 using Smartwyre.DeveloperTest.Types;
 
@@ -11,7 +12,7 @@ class Program
     static void Main(string[] args)
     {
         var (rebateStore, productStore) = DataSeeder.CreateStores();
-        var rebateService = new RebateService(rebateStore, productStore);
+        var rebateService = new RebateService(rebateStore, productStore, new RebateIncentiveFactory());
 
         WriteSampleData();
 

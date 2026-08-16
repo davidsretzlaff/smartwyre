@@ -1,5 +1,6 @@
 using Moq;
 using Smartwyre.DeveloperTest.Data;
+using Smartwyre.DeveloperTest.Incentives;
 using Smartwyre.DeveloperTest.Services;
 using Smartwyre.DeveloperTest.Tests.DataBuilders;
 using Smartwyre.DeveloperTest.Types;
@@ -13,7 +14,7 @@ public class RebateServiceTests
     private readonly Mock<IProductDataStore> _productDataStore = new();
 
     private RebateService CreateSut() =>
-        new(_rebateDataStore.Object, _productDataStore.Object);
+        new(_rebateDataStore.Object, _productDataStore.Object, new RebateIncentiveFactory());
 
     private void SetupStores(Rebate rebate, Product product, CalculateRebateRequest request)
     {
