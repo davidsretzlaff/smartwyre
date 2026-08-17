@@ -1,10 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Smartwyre.DeveloperTest.Data.Seed;
 using Smartwyre.DeveloperTest.Incentives;
 using Smartwyre.DeveloperTest.Services;
 using Smartwyre.DeveloperTest.Contracts;
-using Smartwyre.DeveloperTest.Models;
 
 namespace Smartwyre.DeveloperTest.Runner;
 
@@ -34,7 +33,26 @@ class Program
             Volume = volume
         });
 
+        WriteResult(result);
+    }
+
+    static void WriteResult(CalculateRebateResult result)
+    {
         Console.WriteLine($"Success: {result.Success}");
+
+        if (!result.Success)
+        {
+            return;
+        }
+
+        Console.WriteLine($"Rebate identifier: {result.RebateIdentifier}");
+        Console.WriteLine($"Product identifier: {result.ProductIdentifier}");
+        Console.WriteLine($"Discount type: {result.IncentiveType}");
+        Console.WriteLine($"Item unit value: {result.UnitPrice}");
+        Console.WriteLine($"Volume: {result.Volume}");
+        Console.WriteLine($"Amount before discount (item unit value x volume): {result.AmountBeforeDiscount}");
+        Console.WriteLine($"Rebate amount: {result.RebateAmount}");
+        Console.WriteLine($"Amount after discount: {result.AmountAfterDiscount}");
     }
 
     static void WriteSampleData()
