@@ -73,10 +73,27 @@ Folder layout (main library):
 | `Contracts/` | Use-case DTOs (`CalculateRebateRequest` / `Result`) |
 | `Models/` | Data shapes and enums (`Rebate`, `Product`, …) |
 | `Incentives/` | Strategy implementations (domain behavior) |
+| `Mappings/` | Maps domain/apply outcomes into `CalculateRebateResult` |
 | `Data/` | Stores + seed |
 | `Services/` | Orchestration |
 
 Data access uses `IRebateDataStore` / `IProductDataStore` with in-memory implementations. Sample data is shared in `Data/Seed/` for the Runner (and available to tests).
+
+### Calculate result
+
+On success, `CalculateRebateResult` includes:
+
+| Field | Meaning |
+| --- | --- |
+| `UnitPrice` | Item unit value (product price) |
+| `Volume` | Request volume |
+| `AmountBeforeDiscount` | `UnitPrice × Volume` |
+| `RebateAmount` | Incentive amount applied |
+| `AmountAfterDiscount` | Before − rebate (not below zero) |
+| `IncentiveType` | Discount / incentive type |
+| Identifiers | Rebate and product identifiers used |
+
+The Runner prints these fields after a successful calculation.
 
 ## How to add a new incentive type
 

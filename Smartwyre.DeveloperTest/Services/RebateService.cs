@@ -1,6 +1,7 @@
-using Smartwyre.DeveloperTest.Data;
+﻿using Smartwyre.DeveloperTest.Data;
 using Smartwyre.DeveloperTest.Incentives;
 using Smartwyre.DeveloperTest.Contracts;
+using Smartwyre.DeveloperTest.Mappings;
 using Smartwyre.DeveloperTest.Models;
 
 namespace Smartwyre.DeveloperTest.Services;
@@ -26,29 +27,25 @@ public class RebateService : IRebateService
         Rebate rebate = _rebateDataStore.GetRebate(request.RebateIdentifier);
         Product product = _productDataStore.GetProduct(request.ProductIdentifier);
 
-        var result = new CalculateRebateResult();
-
         if (rebate == null)
         {
-            result.Success = false;
-            return result;
+            return CalculateRebateResultMapper.ToFailure(request);
         }
 
         IRebateIncentive incentive = _incentiveFactory.Create(rebate);
         if (incentive == null)
         {
-            result.Success = false;
-            return result;
+            return CalculateRebateResultMapper.ToFailure(request, rebate);
         }
 
         RebateApplicationResult applied = incentive.Apply(product, request.Volume);
-        result.Success = applied.Success;
-
-        if (result.Success)
+        if (!applied.Success)
         {
-            _rebateDataStore.StoreCalculationResult(rebate, applied.Amount);
+            return CalculateRebateResultMapper.ToFailure(request, rebate);
         }
 
-        return result;
+        _rebateDataStore.StoreCalculationResult(rebate, applied.Amount);
+
+        return CalculateRebateResultMapper.ToSuccess(request, rebate, product, applied.Amount);
     }
 }
